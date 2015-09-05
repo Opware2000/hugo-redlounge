@@ -6,3 +6,6 @@
 {{ if .Params.ogimage }}
 <meta property="og:image" content="{{ .Params.ogimage }}" />
 {{ end }}
+{{ if .Params.cover_image_url }}
+<meta property="og:image" content="{{ .Params.cover_image_url }}" />
+{{ end}}
