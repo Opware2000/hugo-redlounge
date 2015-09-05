@@ -9,12 +9,18 @@
 
           <div class="posts">
             {{ $Site := .Site }}
-            {{ range .Site.Pages }}
+            {{ $paginator := .Paginate (where .Data.Pages.ByDate.Reverse "Type" "blog") }}
+            {{ range $paginator.Pages }}
             <section  class="post">
                 <header class="post-header">
                     {{ if .Params.thumbnail }}
-                    <div class="post-avatar-wrapper">
-                        <img class="post-avatar" alt="" src="{{ .Params.thumbnail }}">
+                    <div class="post-avatar-wrapper-home">
+                        <img class="post-avatar-home" alt="" src="{{ .Params.thumbnail }}">
+                    </div>
+                    {{ end }}
+                    {{ if .Params.cover_image_url  }}
+                    <div class="post-avatar-wrapper-home">
+                        <img class="post-avatar-home" alt="" src="{{ .Params.cover_image_url  }}">
                     </div>
                     {{ end }}
                     <h1 class="post-title">
@@ -24,14 +30,14 @@
               <p class="post-meta">
                   {{ if not .Params.nodate }}
                   <span class="post-date">
-                    <span class="post-date-day"><sup>{{ .Date.Format "2" }}</sup></span><span class="post-date-separator">/</span><span class="post-date-month">{{ .Date.Format "Jan" }}</span> <span class="post-date-year">{{ .Date.Format "2006" }}</span>
+                    <span class="post-date-day"><sup>{{ .Date.Format "2" }}</sup></span><span class="post-date-separator">/</span><span class="post-date-month">{{ index $.Site.Data.mois (printf "%d" .Date.Month) }}</span> <span class="post-date-year">{{ .Date.Format "2006" }}</span>
                 </span>
                 {{ end }}
                 {{ if not .Params.noauthor }}
-                    {{ if .Params.author }}By <a class="post-author" {{ if .Params.authorlink }}href="{{ .Params.authorlink }}"{{ end }}>{{ .Params.author }}</a>{{ end }}
+                    {{ if .Params.author }}par <a class="post-author" {{ if .Params.authorlink }}href="{{ .Params.authorlink }}"{{ end }}>{{ .Params.author }}</a>{{ end }}
                 {{ end }}
                 {{ if not .Params.noread }}
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>{{.ReadingTime}} min. read</em></span>
+                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>{{.ReadingTime}} min.</em></span>
                 {{ end }}
                 {{ if .Params.categories }}
                 <div class="post-categories">
@@ -40,18 +46,41 @@
                     {{ end }}
                 </div>
                 {{ end }}
+                {{ if .Params.tags }}
+                <div class="post-categories">
+                    {{ range .Params.tags }}
+                    <a class="post-category post-category-{{ . | urlize }}" href="{{ $Site.BaseURL }}/tags/{{ . | urlize }}">#&nbsp;{{ . }}</a>
+                    {{ end }}
+                </div>
+                {{ end }}
             </p>
             <article class="post-summary">
                   {{ .Summary }}
               </article>
               <div class="read-more-link">
-                  <a href="{{ .RelPermalink }}"><span class="read-more-slashes">//</span>Read More...</a>
+                  <a href="{{ .RelPermalink }}"><span class="read-more-slashes">//</span>En lire plus...</a>
               </div>
           </section>
           {{ end }}
+         <div class="pagination">
+  <nav role="pagination" class="post-list-pagination">
+      {{ if .Paginator.HasPrev }}
+      <a href="{{.Paginator.Prev.URL}}" class="post-list-pagination-item pure-button post-list-pagination-item-prev">
+        <i class="fa fa-angle-double-left"></i>&nbsp;Récent
+      </a>
+      {{ end }}
+    <span class="post-list-pagination-item post-list-pagination-item-current">Page {{.Paginator.PageNumber}} sur {{.Paginator.TotalPages}}</span>
+    {{ if .Paginator.HasNext }}
+      <a href="{{.Paginator.Next.URL}}" class="post-list-pagination-item pure-button post-list-pagination-item-next">
+        Ancien&nbsp;<i class="fa fa-angle-double-right"></i>
+      </a>
+    {{ end }}
+  </nav>
+</div>  
         </div>
 
         {{ partial "footer.html" . }}
+
         </div>
     </div>
     {{ partial "bodyend.html" . }}

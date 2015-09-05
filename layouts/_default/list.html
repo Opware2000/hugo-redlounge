@@ -16,6 +16,12 @@
               <img class="post-avatar" alt="" src="{{ .Params.thumbnail }}">
             </div>
             {{ end }}
+            
+            {{ if .Params.cover_image_url }}
+            <div class="post-avatar-wrapper">
+              <img class="post-avatar" alt="" src="{{ .Params.cover_image_url }}">
+            </div>
+            {{ end }}
             <h1 class="post-title">
               <a href="{{ .RelPermalink }}">{{ .Title }}</a>
             </h1>
@@ -23,7 +29,7 @@
             <p class="post-meta">
             	{{ if not .Params.nodate }}
 		          <span class="post-date">
-		            <span class="post-date-day"><sup>{{ .Date.Format "2" }}</sup></span><span class="post-date-separator">/</span><span class="post-date-month">{{ .Date.Format "Jan" }}</span> <span class="post-date-year">{{ .Date.Format "2006" }}</span>
+		            <span class="post-date-day"><sup>{{ .Date.Format "2" }}</sup></span><span class="post-date-separator">/</span><span class="post-date-month">{{ index $.Site.Data.mois (printf "%d" .Date.Month)  }}</span> <span class="post-date-year">{{ .Date.Format "2006" }}</span>
 		          </span>
       				{{ end }}
       				{{ if not .Params.noauthor }}
@@ -40,6 +46,15 @@
       					{{ end }}
       					</div>
       				{{ end }}
+              {{ if .Params.tags }}
+        <div class="tags-list">
+          <span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+           {{ $Site := .Site }}
+          {{ range .Params.tags }}
+                  <a class="post-tag post-tag-{{ . | urlize }}" href="{{ $Site.BaseURL}}/tags/{{ . | urlize }}">{{ . }}</a>,
+                  {{ end }}
+        </div>
+      {{ end }}
             </p>
             <article class="post-summary">
             	{{ .Summary }}
