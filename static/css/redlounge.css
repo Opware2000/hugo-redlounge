@@ -530,3 +530,15 @@ hr.thin {
         bottom: 0;
     }
 }
+
+/* COULEURS */
+
+.post-category-sciences {
+	background-color: #159818;
+}
+.post-category-futura-sciences{
+	background-color: #3b4489;
+}
+.post-category-pour-la-science{
+	background-color: #51b7ff;
+}
